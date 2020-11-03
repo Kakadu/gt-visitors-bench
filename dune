@@ -1,0 +1,11 @@
+(env
+ (_
+  (flags
+   (-strict-sequence -rectypes -short-paths -strict-formats -short-paths
+     -keep-locs -w -3-9-32-39))))
+
+(executable
+ (name bench1)
+ (libraries L V OCanren visitors.runtime benchmark)
+ (preprocess
+  (staged_pps my_rewriter)))
