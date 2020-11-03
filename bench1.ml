@@ -22,7 +22,7 @@ let tests : _ list =
   let s = run q (synth (fun n -> n === !!"x") (fun c -> c === !!1)) Fun.id in
 
   (* let (_ : int) = (Stream.hd s)#prjc L.prjc in *)
-  let last = 200000 in
+  let last = 2000 in
   let indexes =
     List.sort compare
       [
@@ -38,8 +38,8 @@ let tests : _ list =
            6000;
            7000;
            8000; *)
-        90000;
-        120000;
+        900;
+        1200;
         last;
       ]
   in
@@ -61,6 +61,21 @@ let __ () =
            Format.printf "%s\n%s\n%!" s1 s2;
            failwith "different answers" )
          else Format.printf "%a\n%!" (GT.fmt L.ground) p)
+
+let () =
+  let pp () =
+    let c = Gc.get () in
+    Format.printf "minor_heap_size = %d, major_heap_increment = %d \n%!"
+      c.Gc.minor_heap_size c.Gc.major_heap_increment
+  in
+  pp ();
+  Gc.set
+    {
+      (Gc.get ()) with
+      minor_heap_size = 512 * 128 * 8;
+      major_heap_increment = 30;
+    };
+  pp ()
 
 let pp_GT x =
   let (_ : string) = Format.asprintf "%a" L.pp x in
